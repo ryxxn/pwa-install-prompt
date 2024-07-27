@@ -21,7 +21,7 @@ const MODAL_STYLE = `
         background: rgba(0, 0, 0, 0.5);
         justify-content: center;
         align-items: center;
-        z-index: 9999;
+        z-index: 99999;
       }
       .modal-content {
         min-width: 300px;
