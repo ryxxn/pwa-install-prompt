@@ -83,16 +83,16 @@ function createProxy() {
   // 상태 변화를 감지하기 위한 핸들러
   const handler = {
     set: function (target, property, value) {
-      console.log(
-        `${property}가 ${target[property]}에서 ${value}(으)로 변경되었습니다.`
-      );
+      // console.log(
+      //   `${property}가 ${target[property]}에서 ${value}(으)로 변경되었습니다.`
+      // );
       target[property] = value;
       // 상태 변경 후 추가 동작
       if (property === 'isInstalled') {
         if (value) {
-          console.log('PWA is already installed');
+          // console.log('PWA is already installed');
         } else {
-          console.log('PWA is not installed');
+          // console.log('PWA is not installed');
         }
       }
       return true;
