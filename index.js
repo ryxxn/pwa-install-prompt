@@ -165,7 +165,7 @@ function main() {
   document.head.appendChild(style);
 
   // Create container
-  var container = document.createElement('div');
+  let container = document.createElement('div');
   container.id = 'wepp-install-modal';
   container.className = 'modal-overlay';
   container.innerHTML = renderContent();
@@ -177,6 +177,7 @@ function main() {
 
   const onClose = () => {
     window.location.hash = '';
+    modal.style.display = 'none';
   };
 
   modal.addEventListener('click', onClose);
