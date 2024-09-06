@@ -1,115 +1,16 @@
-function getFaviconHref() {
-  const linkElements = document.getElementsByTagName('link');
-
-  for (let i = 0; i < linkElements.length; i++) {
-    if (linkElements[i].getAttribute('rel') === 'icon') {
-      return linkElements[i].getAttribute('href');
-    }
-  }
-
-  return '';
-}
-
+// constants
 const MODAL_STYLE = `
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-    }
-    .modal-content {
-      min-width: 300px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      position: relative;
-    }
-    .modal-content h1 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
-    .modal-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    #wepp-logo {
-      border-radius: 8px;
-    }
-    #wepp-install-button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 18px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    #wepp-install-button:hover {
-      background: #0056b3;
-    }
-    #wepp-install-button:active {
-      transform: scale(0.98);
-    }
-    #ok-button {
-      all: initial;
-      width: 100%;
-      text-align: center;
-      cursor: pointer;
-      color: #a0a0a0;
-      font-size: 14px;
-      text-decoration: underline;
-    }
-  `;
-
-function createProxy() {
-  // 상태 객체
-  let state = {
-    isInstalled: true,
-  };
-
-  // 상태 변화를 감지하기 위한 핸들러
-  const handler = {
-    set: function (target, property, value) {
-      // console.log(
-      //   `${property}가 ${target[property]}에서 ${value}(으)로 변경되었습니다.`
-      // );
-      target[property] = value;
-      // 상태 변경 후 추가 동작
-      if (property === 'isInstalled') {
-        if (value) {
-          // console.log('PWA is already installed');
-        } else {
-          // console.log('PWA is not installed');
-        }
-      }
-      return true;
-    },
-  };
-
-  // Proxy
-  const proxyState = new Proxy(state, handler);
-
-  return proxyState;
-}
-
-const renderContent = () => {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-  if (isIOS) {
-    return `
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
+  .modal-content { min-width: 300px; background: #fff; padding: 20px; border-radius: 10px; position: relative; }
+  .modal-content h1 { margin-top: 0; margin-bottom: 10px; font-size: 18px; }
+  .modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  #wepp-logo { border-radius: 8px; }
+  #wepp-install-button { margin-top: 10px; width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; font-weight: 700; transition: .3s; }
+  #wepp-install-button:hover { background: #0056b3; }
+  #wepp-install-button:active { transform: scale(.98); }
+  #ok-button { all: initial; width: 100%; text-align: center; cursor: pointer; color: #a0a0a0; font-size: 14px; text-decoration: underline; }
+`;
+const IOS_MODAL_CONTENT = `
       <div class="modal-content">
         <div class="modal-body">
           <h1>IOS 앱 설치 방법</h1>
@@ -141,8 +42,7 @@ const renderContent = () => {
         <button id="ok-button">괜찮아요, 모바일 웹으로 볼게요.</button>
       </div>
     `;
-  }
-  return `
+const DEFAULT_MODAL_CONTENT = `
     <div class="modal-content">
       <div class="modal-body">
         <h1>앱으로 설치하기</h1>
@@ -154,67 +54,127 @@ const renderContent = () => {
         괜찮아요, 모바일 웹으로 볼게요.
       </button>
     </div>
-  `;
+  `
+
+// functions
+
+/**
+ * favicon을 기본 로고로 판별하고 주소를 가져오는 함수
+ */
+function getFaviconHref() {
+  const linkElements = document.getElementsByTagName('link');
+
+  for (let i = 0; i < linkElements.length; i++) {
+    if (linkElements[i].getAttribute('rel') === 'icon') {
+      return linkElements[i].getAttribute('href');
+    }
+  }
+
+  return '';
+}
+
+/**
+ * PWA installed 여부를 감지하기 위한 Proxy 객체 생성
+ */
+function createProxy() {
+  // 상태 객체
+  let state = {
+    isInstalled: true,
+  };
+
+  // 상태 변화를 감지하기 위한 핸들러
+  const handler = {
+    set: function (target, property, value) {
+      // console.log(
+      //   `${property}가 ${target[property]}에서 ${value}(으)로 변경되었습니다.`
+      // );
+      target[property] = value;
+      // 상태 변경 후 추가 동작
+      if (property === 'isInstalled') {
+        if (value) {
+          // console.log('PWA is already installed');
+        } else {
+          // console.log('PWA is not installed');
+        }
+      }
+      return true;
+    },
+  };
+
+  // Proxy
+  const proxyState = new Proxy(state, handler);
+
+  return proxyState;
+}
+
+/**
+ * 모달 내용을 반환하는 함수
+ */
+const getModalContent = () => {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  return isIOS ? IOS_MODAL_CONTENT : DEFAULT_MODAL_CONTENT;
 };
 
-function main() {
-  // Create and append styles
+function initializeStyles() {
   const style = document.createElement('style');
   style.textContent = MODAL_STYLE;
 
   document.head.appendChild(style);
+}
 
-  // Create container
-  let container = document.createElement('div');
+function initializeContainer() {
+  const container = document.createElement('div');
   container.id = 'wepp-install-modal';
   container.className = 'modal-overlay';
-  container.innerHTML = renderContent();
-
+  container.innerHTML = getModalContent();
   document.body.appendChild(container);
+}
 
-  // Get the modal
+const handleHashChange = () => {
+  const hash = window.location.hash;
+  const isValidHash = hash.startsWith('#wepp-install-modal');
+
+  const modal = document.getElementById('wepp-install-modal');
+  modal.style.display = isValidHash ? 'flex' : 'none';
+};
+
+const initializePWAInfo = () => {
+  const nameElement = document.getElementById('wepp-name');
+  const logoElement = document.getElementById('wepp-logo');
+
+  const name = document.title;
+  const logo = getFaviconHref();
+
+  nameElement.textContent = name;
+  logoElement.src = logo;
+}
+
+const onClose = () => {
+  window.location.hash = '';
+  const modal = document.getElementById('wepp-install-modal');
+  modal.style.display = 'none';
+};
+
+const initializeModalEvents = () => {
   const modal = document.getElementById('wepp-install-modal');
 
-  const onClose = () => {
-    window.location.hash = '';
-    modal.style.display = 'none';
-  };
-
+  // 백그라운드 클릭 시 모달 닫기
   modal.addEventListener('click', onClose);
-  document.getElementById('ok-button')?.addEventListener('click', onClose);
   modal.querySelector('.modal-content').addEventListener('click', (e) => {
     e.stopPropagation();
   });
 
-  const handleHashChange = () => {
-    const hash = window.location.hash;
-    const isValidHash = hash.startsWith('#wepp-install-modal');
+  document.getElementById('ok-button').addEventListener('click', onClose);
+}
 
-    const nameElement = document.getElementById('wepp-name');
-    const logoElement = document.getElementById('wepp-logo');
+/**
+ * PWA 설치 버튼 초기화
+ */
+function initializeInstallButton(deferredPrompt) {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    const name = document.title;
-    const logo = getFaviconHref();
+  if (isIOS) return;
 
-    nameElement.textContent = name;
-    logoElement.src = logo;
-
-    modal.style.display = isValidHash ? 'flex' : 'none';
-  };
-
-  window.addEventListener('hashchange', handleHashChange);
-  handleHashChange(); // Run on initial load
-
-  // ----------------------------------------------------------
-  // pwa install
-  const state = createProxy();
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    state.isInstalled = false;
-  });
 
   const installButton = document.getElementById('wepp-install-button');
   installButton.style.display = 'block';
@@ -237,6 +197,31 @@ function main() {
     } catch (error) {
       console.log('Error: ', error);
     }
+  }, { once: true });
+}
+
+function main() {
+
+  initializeStyles();
+
+  initializeContainer();
+
+  initializePWAInfo();
+
+  initializeModalEvents();
+
+  // initialize hash change event
+  window.addEventListener('hashchange', handleHashChange);
+  handleHashChange(); // Run on initial load
+
+  // ----------------------------------------------------------
+  const state = createProxy();
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    const deferredPrompt = e;
+    initializeInstallButton(deferredPrompt)
+    state.isInstalled = false;
   });
 
   window.addEventListener('appinstalled', () => {
