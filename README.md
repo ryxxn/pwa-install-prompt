@@ -1,10 +1,10 @@
-# pwa-install-prompt
+# Easily Add a PWA Installation Popup with Just One Script!
 
 `pwa-install-prompt` is a script that provides a user-friendly modal for installing Progressive Web Apps (PWAs). When the URL contains the hash `#wepp-install-modal`, the installation modal appears. For iOS users, installation instructions are shown instead of the installation button.
 
 
 ## Installation
-To use the script, simply add the following <script> tag to your HTML file:
+To use the script, simply add the following `<script>` tag to your HTML file:
 
 ```javascript
 <script async id="weppstore-install-script" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/index.js"></script>
