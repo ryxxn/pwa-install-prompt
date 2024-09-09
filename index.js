@@ -61,7 +61,8 @@ const DEFAULT_MODAL_CONTENT = `
 // functions
 
 /**
- * favicon을 기본 로고로 판별하고 주소를 가져오는 함수
+ * Function that identifies the favicon as the default logo 
+ * and gets the address
  */
 function getFaviconHref() {
   const linkElements = document.getElementsByTagName('link');
@@ -83,7 +84,7 @@ function appendStyles() {
 }
 
 /**
- * PWA installed 여부를 감지하기 위한 Proxy 객체 생성
+ * Create a Proxy object to detect whether PWA is installed
  */
 function createProxy() {
   // 상태 객체
@@ -91,14 +92,14 @@ function createProxy() {
     isInstalled: true,
   };
 
-  // 상태 변화를 감지하기 위한 핸들러
+  // Handlers for detecting state changes
   const handler = {
     set: function (target, property, value) {
       // console.log(
-      //   `${property}가 ${target[property]}에서 ${value}(으)로 변경되었습니다.`
+      //   `${property} changed from ${target[property]} to ${value}.`
       // );
       target[property] = value;
-      // 상태 변경 후 추가 동작
+      // Additional actions after status change
       if (property === 'isInstalled') {
         if (value) {
           // console.log('PWA is already installed');
@@ -160,7 +161,6 @@ function getModal() {
   return { modal, modalContent, okButton, installButton };
 }
 
-// 모달 내용 클릭 시 이벤트 전파 방지
 function preventModalContentClick(event) {
   event.stopPropagation();
 }
@@ -168,7 +168,7 @@ function preventModalContentClick(event) {
 function initializeModalEvents() {
   const { modal, modalContent, okButton } = getModal();
 
-  // 백그라운드 클릭 시 모달 닫기
+  // Close Modal on Background Click
   modal.addEventListener('click', handleModalClose);
   modalContent.addEventListener('click', preventModalContentClick);
 
@@ -199,7 +199,7 @@ function main() {
 
   appendStyles();
 
-  // 모달 컨테이너 생성 및 dom에 추가
+  // Create Modal containers and add them to dom
   const container = createContainer();
   container.innerHTML = getModalContent(isIOS);
 
