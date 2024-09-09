@@ -1,18 +1,18 @@
 // constants
 const MODAL_STYLE = `
-  .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
-  .modal-content { min-width: 300px; max-width:340px; background: #fff; border-radius: 10px; position: relative; box-sizing:border-box; }
-  .modal-content h1 { font-size: 18px; }
-  .modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .wepp-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
+  .wepp-modal-content { min-width: 300px; max-width:340px; background: #fff; border-radius: 10px; position: relative; box-sizing:border-box; }
+  .wepp-modal-content h1 { font-size: 18px; }
+  .wepp-modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
   #wepp-logo { border-radius: 8px; }
   #wepp-install-button { width: 100%; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; font-weight: 700; transition: .3s; }
   #wepp-install-button:hover { background: #0056b3; }
   #wepp-install-button:active { transform: scale(.98); }
-  #ok-button { all: initial; font:inherit; width: 100%; text-align: center; cursor: pointer; color: #a0a0a0; font-size: 14px; text-decoration: underline; }
+  #wepp-skip-button { all: initial; font:inherit; width: 100%; text-align: center; cursor: pointer; color: #a0a0a0; font-size: 14px; text-decoration: underline; }
 `;
 const IOS_MODAL_CONTENT = `
-      <div class="modal-content" style="padding: 20px;">
-        <div class="modal-body">
+      <div class="wepp-modal-content" style="padding: 20px;">
+        <div class="wepp-modal-body">
           <h1 style="margin-top: 0; margin-bottom: 10px;">IOS 앱 설치 방법</h1>
           <img id="wepp-logo" alt="logo" width="64" height="64" />
           <h2 id="wepp-name"></h2>
@@ -41,18 +41,18 @@ const IOS_MODAL_CONTENT = `
         </p>
         <p style="margin-block:4px;">2. '홈 화면에 추가'를 눌러주세요.</p>
 
-        <button id="ok-button">괜찮아요, 모바일 웹으로 볼게요.</button>
+        <button id="wepp-skip-button">괜찮아요, 모바일 웹으로 볼게요.</button>
       </div>
     `;
 const DEFAULT_MODAL_CONTENT = `
-    <div class="modal-content" style="padding: 20px;">
-      <div class="modal-body">
+    <div class="wepp-modal-content" style="padding: 20px;">
+      <div class="wepp-modal-body">
         <h1 style="margin-top: 0; margin-bottom: 10px;">앱으로 설치하기</h1>
         <img id="wepp-logo" alt="logo" width="64" height="64" />
         <h2 id="wepp-name"></h2>
       </div>
       <button id="wepp-install-button" style="margin-top: 10px;padding: 10px;">설치하기</button>
-      <button id="ok-button" style="margin-top: 20px">
+      <button id="wepp-skip-button" style="margin-top: 20px">
         괜찮아요, 모바일 웹으로 볼게요.
       </button>
     </div>
@@ -124,7 +124,7 @@ const getModalContent = (isIOS) => {
 function createContainer() {
   const container = document.createElement('div');
   container.id = 'wepp-install-modal';
-  container.className = 'modal-overlay';
+  container.className = 'wepp-modal-overlay';
   document.body.appendChild(container);
   return container;
 }
@@ -150,15 +150,8 @@ const initializePWAInfo = () => {
 
 function handleModalClose() {
   window.location.hash = '';
-}
-
-function getModal() {
   const modal = document.getElementById('wepp-install-modal');
-  const modalContent = modal.querySelector('.modal-content');
-  const okButton = document.getElementById('ok-button');
-  const installButton = document.getElementById('wepp-install-button');
-
-  return { modal, modalContent, okButton, installButton };
+  modal.style.display = 'none';
 }
 
 function preventModalContentClick(event) {
@@ -166,13 +159,15 @@ function preventModalContentClick(event) {
 }
 
 function initializeModalEvents() {
-  const { modal, modalContent, okButton } = getModal();
+  const modal = document.getElementById('wepp-install-modal');
+  const skipButton = document.getElementById('wepp-skip-button');
+  const modalContent = modal.querySelector('.wepp-modal-content');
 
   // Close Modal on Background Click
   modal.addEventListener('click', handleModalClose);
   modalContent.addEventListener('click', preventModalContentClick);
 
-  okButton.addEventListener('click', handleModalClose);
+  skipButton.addEventListener('click', handleModalClose);
 }
 
 const showPrompt = (deferredPrompt) => {
