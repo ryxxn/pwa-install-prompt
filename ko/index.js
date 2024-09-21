@@ -1,13 +1,15 @@
 // constants
 const MODAL_STYLE = `
+  .wepp-modal-overlay * { box-sizing: border-box; }
   .wepp-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
-  .wepp-modal-content { min-width: 300px; max-width:340px; background: #fff; border-radius: 10px; position: relative; box-sizing:border-box; }
+  .wepp-modal-content { min-width: 300px; max-width:340px; background: #fff; border-radius: 10px; position: relative; }
   .wepp-modal-content h1 { font-size: 18px; }
   .wepp-modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
   #wepp-logo { border-radius: 8px; }
   #wepp-install-button { width: 100%; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; font-weight: 700; transition: .3s; }
   #wepp-install-button:hover { background: #0056b3; }
   #wepp-install-button:active { transform: scale(.98); }
+  #wepp-install-button:disabled { opacity:0.7; cursor: not-allowed; }
   #wepp-skip-button { all: initial; font:inherit; width: 100%; text-align: center; cursor: pointer; color: #a0a0a0; font-size: 14px; text-decoration: underline; }
 `;
 const IOS_MODAL_CONTENT = `
@@ -51,7 +53,7 @@ const DEFAULT_MODAL_CONTENT = `
         <img id="wepp-logo" alt="logo" width="64" height="64" />
         <h2 id="wepp-name"></h2>
       </div>
-      <button id="wepp-install-button" style="margin-top: 10px;padding: 10px;">설치하기</button>
+      <button id="wepp-install-button" style="margin-top: 10px;padding: 10px;" disabled>앱 정보 불러오는 중...</button>
       <button id="wepp-skip-button" style="margin-top: 20px">
         괜찮아요, 모바일 웹으로 볼게요.
       </button>
@@ -217,6 +219,8 @@ function main() {
       const deferredPrompt = e;
       const installButton = document.getElementById('wepp-install-button');
       installButton.addEventListener('click', () => showPrompt(deferredPrompt), { once: true })
+      installButton.innerText = '앱으로 설치하기';
+      installButton.disabled = false;
       state.isInstalled = false;
     });
   }
