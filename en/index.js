@@ -17,6 +17,7 @@ const TEXT = {
   WAITING: 'Loading app info...', // Loading app info...
   SKIP_BUTTON: "I'm fine, I'll just view it on my mobile.", // I'm fine, I'll just view it on my mobile.
   INSTALL_BUTTON: 'Install as an app', // Install as an app
+  INSTALL_UNAVAILABLE: "The app is already installed or your environment doesn't support installation.", // The app is already installed or your environment doesn't support installation.
   // IOS device specific text
   IOS: {
     TITLE: 'IOS App Installation Method', // IOS App Installation Method
@@ -118,40 +119,6 @@ function appendStyles() {
   document.head.appendChild(style);
 }
 
-/**
- * Create a Proxy object to detect whether PWA is installed
- */
-function createProxy() {
-  // 상태 객체
-  let state = {
-    isInstalled: true,
-  };
-
-  // Handlers for detecting state changes
-  const handler = {
-    set: function (target, property, value) {
-      // console.log(
-      //   `${property} changed from ${target[property]} to ${value}.`
-      // );
-      target[property] = value;
-      // Additional actions after status change
-      if (property === 'isInstalled') {
-        if (value) {
-          // console.log('PWA is already installed');
-        } else {
-          // console.log('PWA is not installed');
-        }
-      }
-      return true;
-    },
-  };
-
-  // Proxy
-  const proxyState = new Proxy(state, handler);
-
-  return proxyState;
-}
-
 const getModalContent = (isIOS) => {
   return isIOS ? IOS_MODAL_CONTENT : DEFAULT_MODAL_CONTENT;
 };
@@ -226,6 +193,9 @@ const showPrompt = (deferredPrompt) => {
 
 function main() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isRunningAsPWA =
+    window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true; // iOS
 
   appendStyles();
 
@@ -244,22 +214,33 @@ function main() {
   window.addEventListener('hashchange', handleHashChange);
 
   // ----------------------------------------------------------
-  const state = createProxy();
+  if (isRunningAsPWA) {
+    handleModalClose();
+  }
+  else if (!isIOS) {
+    let beforeInstallPromptFired = false;
+    const installButton = document.getElementById('wepp-install-button');
 
-  if (!isIOS) {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       const deferredPrompt = e;
-      const installButton = document.getElementById('wepp-install-button');
       installButton.addEventListener('click', () => showPrompt(deferredPrompt), { once: true })
       installButton.innerText = TEXT.INSTALL_BUTTON;
       installButton.disabled = false;
-      state.isInstalled = false;
+
+      beforeInstallPromptFired = true;
     });
+
+    // Give the browser time to fire the beforeinstallprompt event
+    setTimeout(() => {
+      if (!beforeInstallPromptFired) {
+        installButton.innerText = TEXT.INSTALL_UNAVAILABLE;
+        installButton.disabled = true;
+      }
+    }, 1000); // 1 second delay
   }
 
   window.addEventListener('appinstalled', () => {
-    state.isInstalled = true;
     console.log('PWA was installed');
   });
 }
