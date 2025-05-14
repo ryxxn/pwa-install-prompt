@@ -219,11 +219,11 @@ function main() {
   }
   else if (!isIOS) {
     let beforeInstallPromptFired = false;
+    const installButton = document.getElementById('wepp-install-button');
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       const deferredPrompt = e;
-      const installButton = document.getElementById('wepp-install-button');
       installButton.addEventListener('click', () => showPrompt(deferredPrompt), { once: true })
       installButton.innerText = TEXT.INSTALL_BUTTON;
       installButton.disabled = false;
@@ -231,12 +231,13 @@ function main() {
       beforeInstallPromptFired = true;
     });
 
-
-    if (!beforeInstallPromptFired) {
-      const installButton = document.getElementById('wepp-install-button');
-      installButton.innerText = TEXT.INSTALL_UNAVAILABLE;
-      installButton.disabled = true;
-    }
+    // Give the browser time to fire the beforeinstallprompt event
+    setTimeout(() => {
+      if (!beforeInstallPromptFired) {
+        installButton.innerText = TEXT.INSTALL_UNAVAILABLE;
+        installButton.disabled = true;
+      }
+    }, 1000); // 1 second delay
   }
 
   window.addEventListener('appinstalled', () => {
