@@ -7,12 +7,12 @@
 To use the script, simply add the following `<script>` tag to your HTML file:
 
 ```javascript
-<script async id="weppstore-install-script" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/index.js"></script>
+<script async id="wepp-install-modal" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/index.js"></script>
 ```
 
 - For Korean
 ```javascript
-<script async id="weppstore-install-script" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/ko/index.js"></script>
+<script async id="wepp-install-modal" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/ko/index.js"></script>
 ```
 
 
@@ -30,7 +30,7 @@ To use the script, simply add the following `<script>` tag to your HTML file:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PWA Install Prompt</title>
-    <script async id="weppstore-install-script" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/index.js"></script>
+    <script async id="wepp-install-modal" src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/index.js"></script>
 </head>
 <body>
     <h1>Welcome to My PWA</h1>
