@@ -101,15 +101,10 @@ const DEFAULT_MODAL_CONTENT = `
  * and gets the address
  */
 function getFaviconHref() {
-  const linkElements = document.getElementsByTagName('link');
+  const link = document.querySelector('link[rel~="icon"]')
+    || document.querySelector('link[rel~="apple-touch-icon"]');
 
-  for (let i = 0; i < linkElements.length; i++) {
-    if (linkElements[i].getAttribute('rel') === 'icon') {
-      return linkElements[i].getAttribute('href');
-    }
-  }
-
-  return '';
+  return link ? link.getAttribute('href') : '';
 }
 
 function appendStyles() {
@@ -242,6 +237,9 @@ function main() {
 
   window.addEventListener('appinstalled', () => {
     console.log('PWA was installed');
+    if (window.location.hash.startsWith('#wepp-install-modal')) {
+      handleModalClose();
+    }
   });
 }
 
