@@ -15,6 +15,11 @@ To use the script, simply add the following `<script>` tag to your HTML file:
 <script async src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/ko/index.js"></script>
 ```
 
+- For Ukrainian
+```javascript
+<script async src="https://cdn.jsdelivr.net/gh/ryxxn/pwa-install-prompt@main/uk/index.js"></script>
+```
+
 
 ## Usage
 1. When the URL contains the hash #wepp-install-modal, the installation modal will automatically be displayed.
