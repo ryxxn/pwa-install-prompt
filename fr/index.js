@@ -34,6 +34,7 @@ const MODAL_STYLE = `
   .wepp-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); justify-content: center; align-items: center; z-index: 99999; }
   .wepp-modal-content { min-width: 340px; max-width:340px; background: #fff; color: #000; border-radius: 10px; position: relative; }
   .wepp-modal-content h1 { font-size: 18px; }
+  .wepp-modal-content h1, .wepp-modal-content h2 { color: inherit; }
   .wepp-modal-body { display: flex; flex-direction: column; align-items: center; gap: 10px; }
   #wepp-logo { border-radius: 8px; }
   #wepp-install-button { width: 100%; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; font-weight: 700; transition: .3s; }

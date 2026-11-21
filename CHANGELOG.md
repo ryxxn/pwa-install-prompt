@@ -29,3 +29,7 @@
 ### Added
 
 - Ukrainian translation (`uk/index.js`)
+
+### Fixed
+
+- The modal text is now readable on dark-themed pages, including pages that set their own `h1`/`h2` color
