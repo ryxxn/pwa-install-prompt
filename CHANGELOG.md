@@ -24,8 +24,13 @@
 - `getFaviconHref` now also matches `shortcut icon` and `apple-touch-icon` links, not only an exact `rel="icon"`
 - The modal now closes after `appinstalled` (only when its own hash is active, so an unrelated page hash is left untouched)
 
-## [Unreleased]
+## [0.3.0] - 2026-11-22
 
 ### Added
 
-- Ukrainian translation (`uk/index.js`)
+- Ukrainian translation (`uk/index.js`) by [@virtuoz-star](https://github.com/virtuoz-star) in https://github.com/ryxxn/pwa-install-prompt/pull/5
+
+### Fixed
+
+- The modal text is now readable on dark-themed pages by [@virtuoz-star](https://github.com/virtuoz-star) in https://github.com/ryxxn/pwa-install-prompt/pull/6
+- Modal headings stay readable when the page sets its own `h1`/`h2` color in https://github.com/ryxxn/pwa-install-prompt/pull/7
