@@ -23,3 +23,9 @@
 
 - `getFaviconHref` now also matches `shortcut icon` and `apple-touch-icon` links, not only an exact `rel="icon"`
 - The modal now closes after `appinstalled` (only when its own hash is active, so an unrelated page hash is left untouched)
+
+## [Unreleased]
+
+### Added
+
+- Ukrainian translation (`uk/index.js`)
